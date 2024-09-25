@@ -4556,7 +4556,7 @@ vec2 scaleAroundAnchor(vec2 pos, vec2 anchor, float scale) {
     return newPos;
 }
 
-#define REFERENCE_ASPECT 1.77777777778
+#define REFERENCE_ASPECT 1.77777777778 
 
 uniform float animateProgress;
 uniform float borderRadius;
@@ -4583,7 +4583,7 @@ void main() {
     float aspectScale = (aspect / REFERENCE_ASPECT) - 1.;    
     aspectScale /= aspect;
 
-    uv.y = mix(aspectScale, 1.0 - aspectScale, vUv.y);
+    
 
     vec4 albedo = texture2D(map, uv);
 
@@ -4666,24 +4666,23 @@ vec2 getRectPos(vec4 rect, vec2 uv) {
 void main() {
     vec3 pos = position;
 
-    float stepEdgeCurve = 1.0 - sin(animateProgress * PI) * 2.0;    
+    float rotateStepEdgeCurve = 1.0 - sin(animateProgress * PI) * 2.0;    
     float startEndCurve = smoothstep(0.2, 1.0, animateProgress);
-    float rotateCurve = PI * 0.125 * sin(animateProgress * PI);     
+    float rotateCurve = (smoothstep(0.1, 0.4, animateProgress) - smoothstep(0.6, 0.9, animateProgress)) * 0.4;
     float translateCurve = smoothstep(0.0, 0.2, animateProgress) - smoothstep(0.2, 0.8, animateProgress);
 
     vec2 videoPanelStartPos = getRectPos(startRect, uv);
     vec2 videoPanelEndPos = getRectPos(endRect, uv);
 
-    float rotateMask = smoothstep(stepEdgeCurve, 1.0, uv.x);
-    rotateMask *= smoothstep(stepEdgeCurve, 1.0, uv.y);
+    float rotateMask = smoothstep(rotateStepEdgeCurve, 1.0, uv.x);
+    rotateMask *= smoothstep(rotateStepEdgeCurve, 1.0, uv.y);
 
     float translateMask = smoothstep(0.6, 1.0, uv.x);
     translateMask *= smoothstep(0.5, 1.0, uv.y);
-    translateMask *= translateCurve;
 
     pos.xy = mix(videoPanelStartPos, videoPanelEndPos, startEndCurve);
     pos.xy = rotate(pos.xy, rotateCurve * rotateMask);
-    pos.x *= 1.0 + 0.4 * translateMask;
+    pos.x *= 1.0 + 0.3 * translateCurve * translateMask;
 
     gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
 
