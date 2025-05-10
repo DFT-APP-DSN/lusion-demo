@@ -1,7 +1,6 @@
 import * as THREE from 'three';
 import Stats from "three/addons/libs/stats.module.js";
 import { RGBELoader } from "three/addons/loaders/RGBELoader.js";
-import hdr from "../assets/hdri/quarry_01_1k.hdr";
 import { AnimatedTube } from "./animatedTube";
 import { debugGui } from "./debugGui";
 import LoadingGroup from './loadingGroup';
@@ -52,7 +51,7 @@ class HomeScene {
         this.scene = new THREE.Scene();
         this.scene.background = new THREE.Color(window.getComputedStyle(document.body).backgroundColor);
 
-        new RGBELoader().load(hdr, (texture) => {
+        new RGBELoader().load('assets/hdri/quarry_01_1k.hdr', (texture) => {
             texture.mapping = THREE.EquirectangularReflectionMapping;
             this.scene.environment = texture;
         });

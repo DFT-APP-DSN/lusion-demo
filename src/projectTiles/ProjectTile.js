@@ -5,7 +5,6 @@ import projectTileFrag from "../shaders/projectTileFrag.glsl";
 import projectTileVert from "../shaders/projectTileVert.glsl";
 import { animateAsync, randomSign, waitAsync } from "../utils/animationUtils";
 import { elementToWorldRect } from "../utils/utils";
-import hdr from "../../assets/hdri/studio_small_08_1k.hdr";
 
 const ASPECT = 16 / 9;
 const DEFAULT_BG_COLOUR = "#eee";
@@ -58,7 +57,7 @@ export default class ProjectTile extends THREE.Group {
         this.portalCamera.position.copy(DEFAULT_CAM_POS);
         this.portalCamera.lookAt(CAMERA_LOOKAT);
 
-        const texture = await new RGBELoader().loadAsync(hdr);
+        const texture = await new RGBELoader().loadAsync('assets/hdri/studio_small_08_1k.hdr');
         texture.mapping = THREE.EquirectangularReflectionMapping;
         this.portalScene.environment = texture;
         this.portalScene.environmentIntensity = 0.8;
